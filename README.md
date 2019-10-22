@@ -39,7 +39,7 @@ signature = hmac.new(API_KEY_SECRET.encode('utf8'), params_str.encode('utf8'), s
 2. signature: 签名结果
 
 ### 请求频率限制
-默认10秒内最大请求量1000
+默认10秒内最大请求量100
 
 ### 接口响应
 1. 所有接口返回数据均为application/json
