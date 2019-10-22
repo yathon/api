@@ -11,6 +11,8 @@ from time import time
 import requests
 import uuid
 
+from py.api_test import ORDER_STATE_OPEN, ORDER_STATE_CLOSED
+
 API_KEY_PRIVATE_PATH = '/api/v1/private'
 API_KEY_PUBLIC_PATH  = '/api/v1/public'
 ACCOUNT_PRIVATE_PATH = '/account'
@@ -214,6 +216,9 @@ class AwsexApiKeyClient(AwsClientBase):
             'end_tm_ms': get_cur_time_ms(),
             'limit': 20
         }
+        if data['state']:
+            assert data['state'] in ORDER_STATE_OPEN
+
         data_str = self.get_data_str(data);
         signed_headers = self.get_signed_headers(data_str)
 
@@ -229,6 +234,9 @@ class AwsexApiKeyClient(AwsClientBase):
             'end_tm_ms': get_cur_time_ms(),
             'limit': 20
         }
+        if data['state']:
+            assert data['state'] in ORDER_STATE_CLOSED
+
         data_str = self.get_data_str(data);
         signed_headers = self.get_signed_headers(data_str)
 
