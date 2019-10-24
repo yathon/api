@@ -113,7 +113,6 @@ POST /api/v1/public/symbols
 | 最小提币金额 | min_withdraw_amount |  |
 | 最小充值金额 | min_deposit_amount |  |
 | 提币费用 | withdraw_fee | 当前币种为单位 |
-| 需要人工审核的提币金额 | min_review_amount |  |
 | 充值确认数 | exchange_confirm |  |
 | 提币确认数 | withdraw_confirm |  |
 | 链上精度 | decimal |  |
@@ -132,7 +131,6 @@ POST /api/v1/public/symbols
 		"min_withdraw_amount": 0.0001,
 		"min_deposit_amount": 0.0001,
 		"withdraw_fee": 0.0001,
-		"min_review_amount": 0.0001,
 		"exchange_confirm": 12,
 		"withdraw_confirm": 12,
 		"decimal": 18,
@@ -168,7 +166,6 @@ POST /api/v1/private/balance/list
 | 可用余额 | avail |  |
 | 冻结余额 | frozen | |
 | 总余额 | balance | |
-| 等值btc数量 | equal_btc |  |
 | 精度 | decimal |  |
 
 ```json
@@ -180,7 +177,6 @@ POST /api/v1/private/balance/list
 		"avail": 998.9842,
 		"frozen": 0.0,
 		"balance": 998.9842,
-		"equal_btc": 998.9842,
 		"decimal": 8
 	}]
 }
@@ -300,7 +296,6 @@ POST /api/v1/private/order/state
 ### 返回值
 | 名称        | 字段     |  说明 |
 | --------   | -----:   | :----: |
-| 用户ID | user_id |  |
 | 订单ID | order_id |  |
 | 客户端订单ID | cid |  |
 | 交易对名称 | symbol | |
@@ -322,7 +317,6 @@ POST /api/v1/private/order/state
 	"status": 0,
 	"msg": "ok",
 	"data": {
-		"user_id": "1",
 		"order_id": "BTC_USDT.buy.ecf07180f4af11e9812dacde48001122.1571737204314",
 		"cid": "cid_ece71d74f4af11e9b16aacde48001122",
 		"symbol": "BTC_USDT",
@@ -403,7 +397,6 @@ POST /api/v1/private/order/active/list
 #### 返回数据
 | 名称        | 字段     |  说明 |
 | --------   | -----:   | :----: |
-| 用户ID | user_id |  |
 | 订单ID | order_id |  |
 | 客户端订单ID | cid |  |
 | 交易对名称 | symbol | |
@@ -426,7 +419,6 @@ POST /api/v1/private/order/active/list
 	"status": 0,
 	"msg": "ok",
 	"data": [{
-		"user_id": "1",
 		"order_id": "BTC_USDT.buy.ecf07180f4af11e9812dacde48001122.1571737204314",
 		"cid": "cid_ece71d74f4af11e9b16aacde48001122",
 		"symbol": "BTC_USDT",
@@ -475,7 +467,6 @@ POST /api/v1/private/order/history/list
 #### 返回字段
 | 名称        | 字段     |  说明 |
 | --------   | -----:   | :----: |
-| 用户ID | user_id |  |
 | 订单ID | order_id |  |
 | 客户端订单ID | cid |  |
 | 交易对名称 | symbol | |
@@ -498,7 +489,6 @@ POST /api/v1/private/order/history/list
 	"status": 0,
 	"msg": "ok",
 	"data": [{
-		"user_id": "1",
 		"order_id": "BTC_USDT.buy.ecf07180f4af11e9812dacde48001122.1571737204314",
 		"cid": "cid_ece71d74f4af11e9b16aacde48001122",
 		"symbol": "BTC_USDT",
