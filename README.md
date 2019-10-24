@@ -8,22 +8,27 @@
 #### 密钥
 1. API_KEY_SECRET转为字节
 #### 被签名的数据
-1. 必须包含时间参数nonce，值为毫秒时间戳
+1. 被签名的数据主要是放在消息体中的json参数
+2. 必须包含时间参数nonce，值为毫秒时间戳
 
 ```json
 {
+  "param_1_key": "param_1_value",
   "nonce": 1519808456000
 }
 ```
 
 2. 将消息体转为字节
-#### 签名示例
+#### 签名示例python伪代码
 
 ```python
 import json
 import hmac
+import requests
+
 from hashlib import sha512
 
+API_KEY_ID = ''
 API_KEY_SECRET = ''
 
 # 必需时间参数nonce
@@ -32,7 +37,16 @@ params = {
 }
 
 params_str = json.dumps(params, separators=(',', ':'))
+
 signature = hmac.new(API_KEY_SECRET.encode('utf8'), params_str.encode('utf8'), sha512).hexdigest()
+
+headers = {
+    'api_key': API_KEY_ID,
+    'signature': signature
+}
+url = ''
+ret = requests.post(url, json=None, data=params_str, headers=headers, cookies=None)
+
 ```    
 #### 请求Header
 1. api_key: API_KEY_ID
@@ -54,7 +68,6 @@ signature = hmac.new(API_KEY_SECRET.encode('utf8'), params_str.encode('utf8'), s
 ```
 
 ## 公开接口
-公开接口无签名验证和请求频率限制
 ### 交易对列表
 POST /api/v1/public/symbols
 
@@ -103,7 +116,7 @@ POST /api/v1/public/symbols
 | 需要人工审核的提币金额 | min_review_amount |  |
 | 充值确认数 | exchange_confirm |  |
 | 提币确认数 | withdraw_confirm |  |
-| 精度 | decimal |  |
+| 链上精度 | decimal |  |
 | 是否可充值 | is_depositable |  |
 | 是否可提币 | is_withdrawable |  |
 
@@ -179,7 +192,7 @@ POST /api/v1/private/balance
 #### 参数
 | 名称        | 字段     |  说明 |
 | --------   | -----:   | :----: |
-| 账号类型 | account_type | 币币账号=trading |
+| 账号类型 | account_type | 当前仅支持币币账号余额查询，币币账号=trading |
 | 币名 | currency |  |
 
 ```json
@@ -296,8 +309,8 @@ POST /api/v1/private/order/state
 | 价格 | price | |
 | 数量 | qty  |  |
 | 订单状态 | state | |
-| 订单总价 | amount | |
-| 成交总价 | executed_amount | |
+| 订单总额 | amount | |
+| 成交总额 | executed_amount | |
 | 成交数量 | filled_qty | |
 | 挂单费用 | maker_fee | |
 | 吃单费用 | taker_fee | |
@@ -399,8 +412,8 @@ POST /api/v1/private/order/active/list
 | 价格 | price | |
 | 数量 | qty  |  |
 | 订单状态 | state | |
-| 订单总价 | amount | |
-| 成交总价 | executed_amount | |
+| 订单总额 | amount | |
+| 成交总额 | executed_amount | |
 | 成交数量 | filled_qty | |
 | 挂单费用 | maker_fee | |
 | 吃单费用 | taker_fee | |
@@ -471,8 +484,8 @@ POST /api/v1/private/order/history/list
 | 价格 | price | |
 | 数量 | qty  |  |
 | 订单状态 | state | |
-| 订单总价 | amount | |
-| 成交总价 | executed_amount | |
+| 订单总额 | amount | |
+| 成交总额 | executed_amount | |
 | 成交数量 | filled_qty | |
 | 挂单费用 | maker_fee | |
 | 吃单费用 | taker_fee | |
@@ -537,7 +550,7 @@ POST /api/v1/private/trade/list
 | 交易类型 | type | 当前仅支持限价交易, 限价='limit' |
 | 价格 | price | |
 | 数量 | qty  |  |
-| 交易总价 | amount | |
+| 交易总额 | amount | |
 | 是否买入为挂单 | is_buy_maker | |
 | 卖出费用 | qty_fee | |
 | 买入费用 | amount_fee | |

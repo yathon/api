@@ -11,7 +11,25 @@ from time import time
 import requests
 import uuid
 
-from py.api_test import ORDER_STATE_OPEN, ORDER_STATE_CLOSED
+ORDER_STATE_PENDING_SUBMIT_STR   = 'pending_submit'
+ORDER_STATE_SUBMITTED_STR        = 'submitted'
+ORDER_STATE_PARTIAL_FILLED_STR   = 'partial_filled'
+ORDER_STATE_PARTIAL_CANCELED_STR = 'partial_canceled'
+ORDER_STATE_FILLED_STR           = 'filled'
+ORDER_STATE_CANCELED_STR         = 'canceled'
+ORDER_STATE_PENDING_CANCEL_STR   = 'pending_cancel'
+ORDER_STATE_SYS_CANCELED_STR     = 'sys_canceled'
+
+ORDER_STATE_OPEN = (ORDER_STATE_PENDING_SUBMIT_STR, ORDER_STATE_SUBMITTED_STR, ORDER_STATE_PARTIAL_FILLED_STR,
+                    ORDER_STATE_PENDING_CANCEL_STR)
+ORDER_STATE_CLOSED = (ORDER_STATE_PARTIAL_CANCELED_STR, ORDER_STATE_FILLED_STR,
+                      ORDER_STATE_CANCELED_STR, ORDER_STATE_SYS_CANCELED_STR,
+                      )
+
+
+STATUS_SUCCESS = 0
+
+
 
 API_KEY_PRIVATE_PATH = '/api/v1/private'
 API_KEY_PUBLIC_PATH  = '/api/v1/public'
@@ -25,7 +43,7 @@ def get_cur_time_ms():
     return int(time()*1000)
 
 
-class AwsClientBase(object):
+class BetaexClientBase(object):
     def __init__(self, api_base_url, account_base_url=None, headers=None, cookies=None):
         if api_base_url:
             private_path = API_KEY_PRIVATE_PATH
@@ -94,12 +112,12 @@ class AwsClientBase(object):
         return ret
     
 
-class AwsexApiKeyClient(AwsClientBase):
+class BetaexApiKeyClient(BetaexClientBase):
     """
     Use api_key/api_secret as auth
     """
     def __init__(self, url_base, api_key=None, api_secret=None):
-        super(AwsexApiKeyClient, self).__init__(url_base)
+        super(BetaexApiKeyClient, self).__init__(url_base)
 
         self.api_key = api_key
         self.api_secret = api_secret
