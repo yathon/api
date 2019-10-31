@@ -169,7 +169,7 @@ POST /api/v1/private/balance/list
 | 可用余额 | avail |  |
 | 冻结余额 | frozen | |
 | 总余额 | balance | |
-| 精度 | decimal |  |
+| 币种链上精度 | decimal |  |
 
 ```json
 {
