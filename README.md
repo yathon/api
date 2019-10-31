@@ -788,8 +788,6 @@ wss://ws-test.betaex.com/sub?id=ticker.BTC_USDT
 | --------   | -----:   | :----: |
 | 交易对名称 | symbol | 必须，通过交易对列表获取支持的交易对 |
 | 间隔 | interval | 必须，当前支持1m、3m、5m、15m、30m、1h、2h、4h、6h、8h、12h、1d、3d、1w、1M |
-| 起始时间戳,秒 | begin | 必须 |
-| 终止时间戳,秒 | end | 必须 |
 
 ### 举例
 wss://ws-test.betaex.com/sub?id=kline.BTC_USDT.1m
