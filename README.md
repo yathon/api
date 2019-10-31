@@ -3,7 +3,7 @@
 ## API说明
 
 ### 服务地址
-https://api-test.betaex.com
+https://api.betaex.com
 ### 签名认证
 1. 如果您没有API_KEY_ID和API_KEY_SECRET，请前往个人中心申请
 2. 使用密钥API_KEY_SECRET和算法hmac对消息体进行SHA512签名，获取HEX格式字符串作为签名结果
@@ -573,7 +573,7 @@ POST /api/v1/private/trade/list
 # 行情API
 ## API说明
 ### 服务地址
-https://market-test.betaex.com
+https://market.betaex.com
 
 ## 活跃订单簿
 GET /api/v1/public/market/orderbook/{symbol}/{level}
@@ -586,7 +586,7 @@ GET /api/v1/public/market/orderbook/{symbol}/{level}
 
 ### 举例
 
-GET https://market-test.betaex.com/api/v1/public/market/orderbook/BTC_USDT/ALL
+GET https://market.betaex.com/api/v1/public/market/orderbook/BTC_USDT/ALL
 ```json
 {
     "status": 0,
@@ -600,46 +600,17 @@ GET https://market-test.betaex.com/api/v1/public/market/orderbook/BTC_USDT/ALL
             10060.5, // 卖一价
             0.001,   // 卖一量
             10060.9, // 卖二价
-            0.01,    // 卖二量
-            10061.0,
-            0.01,
-            13000.0,
-            0.06,
-            14000.0,
-            0.08
+            0.01    // 卖二量
         ],
         "bids": [
             10060.4, // 买一价
             0.009,   // 买一量
             10060.3, // 买二价
-            0.01,    // 买二量
-            10060.2,
-            0.01,
-            10060.1,
-            0.01,
-            10060.0,
-            1.932112,
-            10050.0,
-            4.0,
-            10040.0,
-            6.0,
-            10030.0,
-            8.0,
-            10020.0,
-            22.0,
-            10000.0,
-            14.001,
-            9000.0,
-            16.0,
-            8000.0,
-            18.0,
-            7000.0,
-            20.0
+            0.01     // 买二量
         ]
     }
 }
 ```
-
 
 ## 成交记录
 GET /api/v1/public/market/trade/{symbol}
@@ -649,7 +620,7 @@ GET /api/v1/public/market/trade/{symbol}
 | 交易对名称 | symbol | 必须，通过交易对列表获取支持的交易对 |
 
 ### 举例
-GET https://market-test.betaex.com/api/v1/public/market/trade/BTC_USDT
+GET https://market.betaex.com/api/v1/public/market/trade/BTC_USDT
 
 ```json
 {
@@ -682,7 +653,7 @@ GET /api/v1/public/market/ticker/{symbol}
 | --------   | -----:   | :----: |
 | 交易对名称 | symbol | 必须，通过交易对列表获取支持的交易对 |
 ### 举例
-GET https://market-test.betaex.com/api/v1/public/market/ticker/BTC_USDT
+GET https://market.betaex.com/api/v1/public/market/ticker/BTC_USDT
 ```json
 {
     "status": 0,
@@ -716,7 +687,7 @@ GET /api/v1/public/market/kline/{symbol}/{interval}
 | 起始时间戳,秒 | begin | 必须 |
 | 终止时间戳,秒 | end | 必须 |
 ### 举例
-GET https://market-test.betaex.com/api/v1/public/market/kline/BTC_USDT/1m?begin=1572492685&end=1572499129
+GET https://market.betaex.com/api/v1/public/market/kline/BTC_USDT/1m?begin=1572492685&end=1572499129
 ```json
 {
     "status": 0,
@@ -747,7 +718,7 @@ GET https://market-test.betaex.com/api/v1/public/market/kline/BTC_USDT/1m?begin=
 
 ## API说明
 ### 服务地址
-wss://ws-test.betaex.com
+wss://ws.betaex.com
 ## 活跃订单簿
 /sub?id=orderbook.{symbol}.{level}
 ### 参数说明
@@ -758,7 +729,7 @@ wss://ws-test.betaex.com
 | 交易级别 | level | 必须，当前仅支持ALL, 其他将被支持的级别L20、L50 |
 
 ### 举例
-wss://ws-test.betaex.com/sub?id=orderbook.BTC_USDT.ALl
+wss://ws.betaex.com/sub?id=orderbook.BTC_USDT.ALl
 
 ## 成交记录
 /sub?id=trade.{symbol}
@@ -769,7 +740,7 @@ wss://ws-test.betaex.com/sub?id=orderbook.BTC_USDT.ALl
 | 交易对名称 | symbol | 必须，通过交易对列表获取支持的交易对 |
 
 ### 举例
-wss://ws-test.betaex.com/sub?id=trade.BTC_USDT
+wss://ws.betaex.com/sub?id=trade.BTC_USDT
 
 ## 盘口
 /sub?id=ticker.{symbol}
@@ -779,7 +750,7 @@ wss://ws-test.betaex.com/sub?id=trade.BTC_USDT
 | --------   | -----:   | :----: |
 | 交易对名称 | symbol | 必须，通过交易对列表获取支持的交易对 |
 ### 举例
-wss://ws-test.betaex.com/sub?id=ticker.BTC_USDT
+wss://ws.betaex.com/sub?id=ticker.BTC_USDT
 ## k线
 /sub?id=kline.{symbol}.{interval}
 
@@ -790,4 +761,4 @@ wss://ws-test.betaex.com/sub?id=ticker.BTC_USDT
 | 间隔 | interval | 必须，当前支持1m、3m、5m、15m、30m、1h、2h、4h、6h、8h、12h、1d、3d、1w、1M |
 
 ### 举例
-wss://ws-test.betaex.com/sub?id=kline.BTC_USDT.1m
+wss://ws.betaex.com/sub?id=kline.BTC_USDT.1m
