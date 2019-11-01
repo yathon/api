@@ -1,179 +1,17 @@
-# 交易api
-
-## API说明
-
-### 服务地址
-
-https://api.betaex.com
-
-### 签名认证
-
-1. 如果您没有API_KEY_ID和API_KEY_SECRET，请前往个人中心申请
-2. 使用密钥API_KEY_SECRET和算法hmac对消息体进行SHA512签名，获取HEX格式字符串作为签名结果
-
-#### 密钥
-
-1. API_KEY_SECRET转为字节
-
-#### 被签名的数据
-
-1. 被签名的数据主要是放在消息体中的json参数
-2. 必须包含时间参数nonce，值为毫秒时间戳
-3. 将消息体转为字节
-
-```json
-// 签名数据json示例
-{
-  "param_1_key": "param_1_value",
-  "nonce": 1519808456000
-}
-```
-
-#### 签名示例python伪代码
-
-```python
-import json
-import hmac
-import requests
-
-from hashlib import sha512
-
-API_KEY_ID = ''
-API_KEY_SECRET = ''
-
-# 必需时间参数nonce
-params = {
-    "nonce": 1519808456000
-}
-
-params_str = json.dumps(params, separators=(',', ':'))
-
-signature = hmac.new(API_KEY_SECRET.encode('utf8'), params_str.encode('utf8'), sha512).hexdigest()
-
-headers = {
-    'api_key': API_KEY_ID,
-    'signature': signature
-}
-url = ''
-ret = requests.post(url, json=None, data=params_str, headers=headers, cookies=None)
-
-```
-
-#### 请求Header
-
-1. api_key: API_KEY_ID
-2. signature: 签名结果
-
-### 请求频率限制
-
-默认10秒内最大请求量100
-
-### 接口响应
-
-1. 所有接口返回数据均为application/json
-2. status=0表示成功, 其他状态参考具体的接口
-3. data存放需要返回具体的数据，如果无需返回数据，data可能不存在
-
-```json
-{
-    "status": 0,
-    "msg": "ok",
-    "data": {}
-  }
-```
-
-## 公开接口
-
-### 交易对列表
-
-POST /api/v1/public/symbols
-
-#### 返回字段
-
-| 名称        | 字段     |  说明 |
-| --------   | -----:   | :----: |
-| 交易对名称 | symbol |  |
-| 价格精度 | price_decimal |  |
-| 数量精度 | qty_decimal | |
-| 状态 | state | 已上架=1，可交易=2|
-| 最小数量限制 | limit_qty_min |  |
-| 最大数量限制 | limit_qty_max |  |
-| 最小总价限制 | limit_amount_min |  |
-| 最大总价限制 | limit_amount_max |  |
-
-```json
-{
-    "status": 0,
-    "msg": "ok",
-    "data": [{
-        "symbol": "BTC_USDT",
-        "price_decimal": 2,
-        "qty_decimal": 4,
-        "state": 2,
-        "limit_qty_min": 0.001,
-        "limit_qty_max": 1000.0,
-        "limit_amount_min": 1000.0,
-        "limit_amount_max": 1000000.0
-    }]
-}
-```
-
-### 币种列表
-
-/api/v1/public/currencies
-
-#### 返回字符
-
-| 名称        | 字段     |  说明 |
-| --------   | -----:   | :----: |
-| 币名 | currency |  |
-| 链名 | chain_name |  |
-| 币的全名 | full_name | |
-| 是否支持memo | is_memo_support | 支持=1，不支持=0 |
-| 最小提币金额 | min_withdraw_amount |  |
-| 最小充值金额 | min_deposit_amount |  |
-| 提币费用 | withdraw_fee | 当前币种为单位 |
-| 充值确认数 | exchange_confirm |  |
-| 提币确认数 | withdraw_confirm |  |
-| 链上精度 | decimal |  |
-| 是否可充值 | is_depositable |  |
-| 是否可提币 | is_withdrawable |  |
-
-```json
-{
-    "status": 0,
-    "msg": "ok",
-    "data": [{
-        "currency": "ETH",
-        "chain_name": "ETH",
-        "full_name": "ETH",
-        "is_memo_support": 0,
-        "min_withdraw_amount": 0.0001,
-        "min_deposit_amount": 0.0001,
-        "withdraw_fee": 0.0001,
-        "exchange_confirm": 12,
-        "withdraw_confirm": 12,
-        "decimal": 18,
-        "is_depositable": 1,
-        "is_withdrawable": 1
-    }]
-}
-```
-
-## 私密接口
+# 私密接口
 
 私密接口包含签名验证和请求频率限制
 
-### 余额列表
+## 余额列表
 
 POST /api/v1/private/balance/list
 
-#### 接口说明
+### 接口说明
 
 1. 此接口用于获取币币账号的每个币种的余额，币币账号用于币币交易
-2. betaex中币种充值和提币的余额默认放在资金账号，如果需要进行币币交易，需要您先将资金账号的余额划转到币币账号
+2. BetaEX中币种充值和提币的余额默认放在资金账号，如果需要进行币币交易，需要您先将资金账号的余额划转到币币账号
 
-#### 参数
+### 参数
 
 | 名称 | 字段 | 说明 |
 | -------- | -----: | :----: |
@@ -186,7 +24,7 @@ POST /api/v1/private/balance/list
 }
 ```
 
-#### 返回字段
+### 返回字段
 
 | 名称        | 字段     |  说明 |
 | --------   | -----:   | :----: |
@@ -210,11 +48,11 @@ POST /api/v1/private/balance/list
 }
 ```
 
-### 余额详情
+## 余额详情
 
 POST /api/v1/private/balance
 
-#### 参数
+### 参数
 
 | 名称 | 字段 | 说明 |
 | -------- | -----: | :----: |
@@ -229,7 +67,7 @@ POST /api/v1/private/balance
 }
 ```
 
-#### 返回字段
+### 返回字段
 
 ```json
 {
@@ -244,11 +82,11 @@ POST /api/v1/private/balance
 }
 ```
 
-### 订单创建
+## 订单创建
 
 POST /api/v1/private/order/create
 
-#### 参数
+### 参数
 
 | 名称 | 字段 | 说明 |
 | -------- | -----: | :----: |
@@ -271,7 +109,7 @@ POST /api/v1/private/order/create
 }
 ```
 
-#### 响应数据
+### 响应数据
 
 | 名称 | 字段 | 说明 |
 | -------- | -----: | :----: |
@@ -312,13 +150,13 @@ POST /api/v1/private/order/create
 }
 ```
 
-#### 状态码
+### 状态码
 
-### 订单详情
+## 订单详情
 
 POST /api/v1/private/order/state
 
-#### 参数
+### 参数
 
 | 名称 | 字段 | 说明 |
 | --------   | -----:   | :----: |
@@ -333,7 +171,7 @@ POST /api/v1/private/order/state
 }
 ```
 
-### 返回值
+## 返回值
 
 | 名称 | 字段 | 说明 |
 | --------   | -----:   | :----: |
@@ -377,11 +215,11 @@ POST /api/v1/private/order/state
 }
 ```
 
-### 订单取消
+## 订单取消
 
 POST /api/v1/private/order/cancel
 
-#### 参数
+### 参数
 
 | 名称 | 字段 | 说明 |
 | -------- | -----: | :----: |
@@ -396,7 +234,7 @@ POST /api/v1/private/order/cancel
 }
 ```
 
-#### 响应数据
+### 响应数据
 
 | 名称 | 字段 | 说明 |
 | -------- | -----: | :----: |
@@ -414,11 +252,11 @@ POST /api/v1/private/order/cancel
 }
 ```
 
-### 活跃订单列表
+## 活跃订单列表
 
 POST /api/v1/private/order/active/list
 
-#### 参数
+### 参数
 
 | 名称 | 字段 | 说明 |
 | -------- | -----: | :----: |
@@ -441,7 +279,7 @@ POST /api/v1/private/order/active/list
 }
 ```
 
-#### 返回数据
+### 返回数据
 
 | 名称 | 字段 | 说明 |
 | -------- | -----: | :----: |
@@ -487,11 +325,11 @@ POST /api/v1/private/order/active/list
 }
 ```
 
-### 历史订单列表
+## 历史订单列表
 
 POST /api/v1/private/order/history/list
 
-#### 参数
+### 参数
 
 | 名称 | 字段 | 说明 |
 | -------- | -----: | :----: |
@@ -514,7 +352,7 @@ POST /api/v1/private/order/history/list
 }
 ```
 
-#### 返回字段
+### 返回字段
 
 | 名称 | 字段 | 说明 |
 | -------- | -----: | :----: |
@@ -560,11 +398,11 @@ POST /api/v1/private/order/history/list
 }
 ```
 
-### 交易历史
+## 交易历史
 
 POST /api/v1/private/trade/list
 
-#### 参数
+### 参数
 
 | 名称 | 字段 | 说明 |
 | -------- | -----: | :----: |
@@ -583,7 +421,7 @@ POST /api/v1/private/trade/list
 }
 ```
 
-#### 返回字段
+### 返回字段
 
 | 名称        | 字段     |  说明 |
 | --------   | -----:   | :----: |
