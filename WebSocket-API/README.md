@@ -4,7 +4,7 @@
 
 ### 服务地址
 
-wss://ws.betaex.com
+wss://ws.betaex.com/sub
 
 ## 活跃订单簿
 
