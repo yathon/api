@@ -11,4 +11,4 @@
 
 ## 举例
 
-wss://ws.betaex.com/sub?id=orderbook.BTC_USDT.ALl
+wss://ws.betaex.com/sub?id=orderbook.BTC_USDT.ALL
