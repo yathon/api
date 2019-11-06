@@ -9,7 +9,7 @@ https://api.betaex.com
 ### 签名认证
 
 1. 如果您没有API_KEY_ID和API_KEY_SECRET，请前往个人中心申请
-2. 使用密钥API_KEY_SECRET和算法hmac对消息体进行SHA512签名，获取HEX格式字符串作为签名结果
+2. 使用密钥API_KEY_SECRET和算法hmac对消息体进行SHA256签名，获取HEX格式字符串作为签名结果
 
 #### 密钥
 
@@ -36,7 +36,7 @@ import json
 import hmac
 import requests
 
-from hashlib import sha512
+from hashlib import sha256
 
 API_KEY_ID = ''
 API_KEY_SECRET = ''
@@ -48,7 +48,7 @@ params = {
 
 params_str = json.dumps(params, separators=(',', ':'))
 
-signature = hmac.new(API_KEY_SECRET.encode('utf8'), params_str.encode('utf8'), sha512).hexdigest()
+signature = hmac.new(API_KEY_SECRET.encode('utf8'), params_str.encode('utf8'), sha256).hexdigest()
 
 headers = {
     'api_key': API_KEY_ID,
