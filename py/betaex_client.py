@@ -41,10 +41,9 @@ def get_cur_time_ms():
     return int(time()*1000)
 
 
-class BetaexClientBase(object):
+class BetaExClientBase(object):
     def __init__(self, api_base_url):
         self.base_url = api_base_url
-
         self.private_url_base = self.base_url + API_KEY_PRIVATE_PATH
         self.public_url_base = self.base_url + API_KEY_PUBLIC_PATH
 
@@ -66,30 +65,33 @@ class BetaexClientBase(object):
                    }
         return headers
 
-    def signature_test(self):
-        url = self.private_url_base + '/test'
-
-        data_str = self.get_data_str()
-        signed_headers = self.get_signed_headers(data_str)
-        result = self.send_request(url, data=data_str, headers=signed_headers)
-        return result
-
     def send_request(self, url, json=None, data=None, method='POST', headers=None):
-        print(headers)
         if method=='POST':
             ret = requests.post(url, json=json, data=data, headers=headers)
         else:
             ret = requests.get(url, params=data, headers=headers)
         return ret
 
+    def signature_test(self):
+        url = self.private_url_base + '/test'
 
-class BetaexApiKeyClient(BetaexClientBase):
+        data_str = self.get_data_str()
+        signed_headers = self.get_signed_headers(data_str)
+        ret = self.send_request(url, data=data_str, headers=signed_headers)
+        if ret.status_code == 200:
+            return json.loads(ret.text)
+        else:
+            err_msg = 'Something  unexpected happened! http status_code=%s' %( ret.status_code)
+            print(err_msg)
+            raise Exception(err_msg)
+
+
+class BetaExApiKeyClient(BetaExClientBase):
     """
     Use api_key/api_secret as auth
     """
     def __init__(self, url_base, api_key=None, api_secret=None):
-        super(BetaexApiKeyClient, self).__init__(url_base)
-
+        super(BetaExApiKeyClient, self).__init__(url_base)
         self.api_key = api_key
         self.api_secret = api_secret
     
