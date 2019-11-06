@@ -30,10 +30,8 @@ ORDER_STATE_CLOSED = (ORDER_STATE_PARTIAL_CANCELED_STR, ORDER_STATE_FILLED_STR,
 STATUS_SUCCESS = 0
 
 
-
 API_KEY_PRIVATE_PATH = '/api/v1/private'
-API_KEY_PUBLIC_PATH  = '/api/v1/public'
-ACCOUNT_PRIVATE_PATH = '/account'
+API_KEY_PUBLIC_PATH = '/api/v1/public'
 
 
 def get_cur_time_ms():
@@ -44,83 +42,11 @@ def get_cur_time_ms():
 
 
 class BetaexClientBase(object):
-    def __init__(self, api_base_url, account_base_url=None, headers=None, cookies=None):
-        if api_base_url:
-            private_path = API_KEY_PRIVATE_PATH
-            self.base_url = api_base_url
-        elif account_base_url:
-            private_path = ACCOUNT_PRIVATE_PATH
-            self.base_url = account_base_url
-            self.headers = headers
-            self.cookies = cookies
-        else:
-            assert('Need to set base url')
+    def __init__(self, api_base_url):
+        self.base_url = api_base_url
 
-        self.private_url_base = self.base_url + private_path
+        self.private_url_base = self.base_url + API_KEY_PRIVATE_PATH
         self.public_url_base = self.base_url + API_KEY_PUBLIC_PATH
-
-    def send_request(self, url, json=None, data=None, method='POST', headers=None, cookies=None):        
-        if method=='POST':
-            ret = requests.post(url, json=json, data=data, headers=headers, cookies=cookies)
-        else:
-            ret = requests.get(url, params=data, headers=headers, cookies=cookies)
-        return ret
-        
-    def get_balance(self, account_type='trading', headers=None):
-
-        data = {
-                'account_type': account_type, #default account_type=trading
-                }
-        
-        url = self.private_url_base + '/balance'
-        ret = self.send_request(url, data, None, 'POST', headers, self.cookies)
-        return ret
-    
-    def create_order(self, symbol, side, qty, price, _type='limit', user_id=0):
-        data = {
-            'cid': 'cid_' + uuid.uuid1().hex,
-            'symbol': symbol,
-            'side': side,
-            'qty': qty,
-            'price': price,
-            'type': _type,
-            'user_id': user_id
-        }
-
-        url = self.private_url_base + '/order/create'
-        ret = self.send_request(url, data, None, 'POST', self.headers, self.cookies)
-        print(ret.text)
-        return ret
-    
-    def get_order_state(self, order_id, symbol):
-        data = {'order_id': order_id,
-                'symbol': symbol,
-                }
-        url = self.private_url_base  + '/order/state'
-        ret = self.send_request(url, data, None, 'POST', self.headers, self.cookies)
-        print(ret.text)
-        return ret
-    
-    def cancel_order(self, order_id, symbol):
-        data = {'order_id': order_id,
-                'symbol': symbol,
-                }
-
-        url = self.private_url_base + '/order/cancel'
-        ret = self.send_request(url, data, None, 'POST', self.headers, self.cookies)
-        print(ret.text)
-        return ret
-    
-
-class BetaexApiKeyClient(BetaexClientBase):
-    """
-    Use api_key/api_secret as auth
-    """
-    def __init__(self, url_base, api_key=None, api_secret=None):
-        super(BetaexApiKeyClient, self).__init__(url_base)
-
-        self.api_key = api_key
-        self.api_secret = api_secret
 
     def signature(self, api_secret, data):
         return hmac.new(api_secret, data, sha256).hexdigest()
@@ -132,21 +58,40 @@ class BetaexApiKeyClient(BetaexClientBase):
         data['nonce'] = get_cur_time_ms()
         data_str = json.dumps(data, separators=(',', ':'))
         return data_str
-    
+
     def get_signed_headers(self, data):
         signature = self.signature(self.api_secret.encode('utf8'), data.encode('utf8'))
         headers = {'api_key': self.api_key,
                    'signature': signature,
                    }
         return headers
-    
+
     def signature_test(self):
         url = self.private_url_base + '/test'
-        
+
         data_str = self.get_data_str()
         signed_headers = self.get_signed_headers(data_str)
         result = self.send_request(url, data=data_str, headers=signed_headers)
         return result
+
+    def send_request(self, url, json=None, data=None, method='POST', headers=None):
+        print(headers)
+        if method=='POST':
+            ret = requests.post(url, json=json, data=data, headers=headers)
+        else:
+            ret = requests.get(url, params=data, headers=headers)
+        return ret
+
+
+class BetaexApiKeyClient(BetaexClientBase):
+    """
+    Use api_key/api_secret as auth
+    """
+    def __init__(self, url_base, api_key=None, api_secret=None):
+        super(BetaexApiKeyClient, self).__init__(url_base)
+
+        self.api_key = api_key
+        self.api_secret = api_secret
     
     def get_timestamp_ms(self):
         url = self.public_url_base + '/timestamp'
@@ -167,7 +112,7 @@ class BetaexApiKeyClient(BetaexClientBase):
         data_str = self.get_data_str(data)
         signed_headers = self.get_signed_headers(data_str)
         url = self.private_url_base + '/balance'
-        ret = self.send_request(url, None, data_str, 'POST', signed_headers, None)
+        ret = self.send_request(url, None, data_str, 'POST', signed_headers)
         return ret
     
     def list_balance(self, account_type='trading'):
@@ -178,7 +123,7 @@ class BetaexApiKeyClient(BetaexClientBase):
         data_str = self.get_data_str(data)
         signed_headers = self.get_signed_headers(data_str)
         url = self.private_url_base + '/balance/list'
-        ret = self.send_request(url, None, data_str, 'POST', signed_headers, None)
+        ret = self.send_request(url, None, data_str, 'POST', signed_headers)
         return ret
     
     def create_order(self, symbol, side, qty, price, _type='limit'):
@@ -196,7 +141,7 @@ class BetaexApiKeyClient(BetaexClientBase):
         signed_headers = self.get_signed_headers(data_str)
         
 #         print('create_order url=%s, data_str=%s' %(url, data_str))
-        ret = self.send_request(url, None, data_str, 'POST', signed_headers, None)
+        ret = self.send_request(url, None, data_str, 'POST', signed_headers)
         return ret
     
     def get_order_state(self, order_id, symbol):
@@ -208,7 +153,7 @@ class BetaexApiKeyClient(BetaexClientBase):
         data_str = self.get_data_str(data)
         signed_headers = self.get_signed_headers(data_str)
 
-        ret = self.send_request(url, None, data_str, 'POST', signed_headers, None)
+        ret = self.send_request(url, None, data_str, 'POST', signed_headers)
         return ret
     
     def cancel_order(self, order_id, symbol):
@@ -220,7 +165,7 @@ class BetaexApiKeyClient(BetaexClientBase):
         data_str = self.get_data_str(data)
         signed_headers = self.get_signed_headers(data_str)
 
-        ret = self.send_request(url, None, data_str, 'POST', signed_headers, None)
+        ret = self.send_request(url, None, data_str, 'POST', signed_headers)
         return ret
 
     def list_active_order(self, symbol):
@@ -240,7 +185,7 @@ class BetaexApiKeyClient(BetaexClientBase):
         data_str = self.get_data_str(data);
         signed_headers = self.get_signed_headers(data_str)
 
-        ret = self.send_request(url, None, data_str, 'POST', signed_headers, None)
+        ret = self.send_request(url, None, data_str, 'POST', signed_headers)
         return ret
 
     def list_history_order(self, symbol):
@@ -259,7 +204,7 @@ class BetaexApiKeyClient(BetaexClientBase):
         signed_headers = self.get_signed_headers(data_str)
 
         url = self.private_url_base + '/order/history/list'
-        ret = self.send_request(url, None, data_str, 'POST', signed_headers, None)
+        ret = self.send_request(url, None, data_str, 'POST', signed_headers)
         return ret
 
     def list_trade(self, symbol):
@@ -273,5 +218,5 @@ class BetaexApiKeyClient(BetaexClientBase):
         signed_headers = self.get_signed_headers(data_str)
 
         url = self.private_url_base + '/trade/list'
-        ret = self.send_request(url, None, data_str, 'POST', signed_headers, None)
+        ret = self.send_request(url, None, data_str, 'POST', signed_headers)
         return ret
