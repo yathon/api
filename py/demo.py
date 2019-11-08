@@ -1,3 +1,5 @@
+#-*- coding:utf-8 -*-
+
 import json
 from betaex_client import BetaExApiKeyClient
 
@@ -8,7 +10,7 @@ API_SECRET = 'SecFKhuXMEZHJYMTOVHIyiFHXhdke04K40HOAoFi7eYrMbVtLqphbfqN89HEy6d5'
 betaexClient = BetaExApiKeyClient(API_BASE_URL, API_KEY, API_SECRET)
 print(betaexClient.signature_test())
 
-# 查询余额列表
+#list trade acccount balance
 ret = betaexClient.list_balance()
 result = json.loads(ret.text)
 print(result)
