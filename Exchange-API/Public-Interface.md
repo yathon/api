@@ -36,7 +36,7 @@ POST /api/v1/public/symbols
 
 ## 币种列表
 
-/api/v1/public/currencies
+POST /api/v1/public/currencies
 
 ### 返回字符
 
