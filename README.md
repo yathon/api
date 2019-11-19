@@ -1,10 +1,8 @@
 # BetaEX API 说明文档
 
-#Python demo: https://github.com/betaex/betaex_client
-
-
 * BetaEX 交易所的 API 接口说明，本文档为系列文档的目录
 * 本文档会不断的进行更新，如果遇到任何问题，欢迎提交issue参加代码完善
+* Python demo: https://github.com/betaex/betaex_client
 
 ## 目录
 
