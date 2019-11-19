@@ -81,7 +81,7 @@ class BetaExClientBase(object):
         if ret.status_code == 200:
             return json.loads(ret.text)
         else:
-            err_msg = 'Something  unexpected happened! http status_code=%s' %( ret.status_code)
+            err_msg = 'Something unexpected happened! http status_code=%s' %( ret.status_code)
             print(err_msg)
             raise Exception(err_msg)
 
