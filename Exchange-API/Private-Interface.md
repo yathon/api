@@ -2,7 +2,7 @@
 
 私密接口包含签名验证和请求频率限制
 
-## 余额列表
+## 币币账号余额列表
 
 POST /api/v1/private/balance/list
 
@@ -48,7 +48,7 @@ POST /api/v1/private/balance/list
 }
 ```
 
-## 余额详情
+## 币币账号余额详情
 
 POST /api/v1/private/balance
 
@@ -82,6 +82,129 @@ POST /api/v1/private/balance
 }
 ```
 
+## 杠杆账号余额列表
+
+POST /api/v1/private/margin/balance/list
+
+### 接口说明
+
+1. 此接口用于获取钱包账号的每个币种的余额，杠杆账号参与于币币交易
+2. BetaEX中币种充值和提币的余额默认放在资金账号，如果需要进行币币交易，需要您先将资金账号的余额划转到杠杆**账号
+
+### 参数
+
+| 名称 | 字段 | 说明 |
+| -------- | -----: | :----: |
+
+```json
+{
+  "nonce": 1519808456000
+}
+```
+
+### 返回字段
+
+#### 交易对余额列表
+| 名称        | 字段     |  说明 |
+| --------   | -----:   | :----: |
+| 交易对名称 | symbol |  |
+| 净资产等价btc | equal_btc |  |
+| 净资产等价cny | equal_cny | |
+| 保证金率 | insurance_rate | |
+| 强平价格 | liquid_price |  |
+| 强平锁定状态 | is_liquid_locked | 0=未锁定  >0=锁定 |  
+| 借款精度 | loan_decimal |  |
+| 币种余额列表 | currency_list | 列表中包含交易对中两个币种的余额 |
+
+#### 币种余额列表
+| 名称        | 字段     |  说明 |
+| --------   | -----:   | :----: |
+| 币种名称 | currency |  |
+| 总余额 | balance |  |
+| 可用数量 | avail | |
+| 冻结数量 | frozen | |
+| 借币数量 | loan |  |
+| 累计的利息 | interest |  |  
+| 可借数量 | loanable |  |
+| 借币日利率 | interest_rate |  |
+| 最小借币数量 | min_loan |  |
+| 可划转数量 | transferable |  |
+
+```json
+{
+	"status": 0,
+	"msg": "ok",
+	"data": [{
+		"symbol": "string",
+		"equal_btc": 0,
+		"equal_cny": 0,
+		"insurance_rate": 0,
+		"liquid_price": 0,
+        "is_liquid_locked": 0,
+        "loan_decimal": 2,
+		"currency_list": [{
+			"currency": "string",
+			"balance": 0,
+			"avail": 0,
+			"frozen": 0,
+			"loan": 0,
+			"interest": 0,
+			"loanable": 0,
+			"interest_rate": 0,
+			"min_loan": 0,
+			"transferable": 0
+		}]
+	}]
+}
+```
+
+## 杠杆账号余额详情
+
+POST /api/v1/private/margin/balance
+
+### 参数
+
+| 名称 | 字段 | 说明 |
+| -------- | -----: | :----: |
+| 交易对名称 | symbol |  |
+
+```json
+{
+  "symbol": "BTC_USDT",
+  "nonce": 1519808456000
+}
+```
+
+### 返回字段
+
+```json
+{
+	"status": 0,
+	"msg": "ok",
+	"data": {
+		"symbol": "string",
+		"equal_btc": 0,
+		"equal_cny": 0,
+		"insurance_rate": 0,
+		"liquid_price": 0,
+        "is_liquid_locked": 0,
+        "loan_decimal": 2,
+		"currency_list": [{
+			"currency": "string",
+			"balance": 0,
+			"avail": 0,
+			"frozen": 0,
+			"loan": 0,
+			"interest": 0,
+			"loanable": 0,
+			"interest_rate": 0,
+			"min_loan": 0,
+			"transferable": 0
+		}]
+	}
+}
+```
+
 ## 订单创建
 
 POST /api/v1/private/order/create
@@ -96,6 +219,7 @@ POST /api/v1/private/order/create
 | 价格 | price | 必须，价格限制由所选的交易对决定 |
 | 数量 | qty  | 必须，数量限制由所选的交易对决定 |
 | 交易类型 | type | 必须，当前仅支持限价交易, 限价='limit' |
+| 账号类型 | account_type | 可选，默认'trading'. 币币账号=trading，杠杆账号=margin |
 
 ```json
 {
@@ -225,6 +349,7 @@ POST /api/v1/private/order/cancel
 | -------- | -----: | :----: |
 | 订单ID | order_id |  |
 | 交易对名称 | symbol | |
+| 账号类型 | account_type | 可选，默认'trading'. 币币账号=trading，杠杆账号=margin |
 
 ```json
 {
@@ -266,6 +391,7 @@ POST /api/v1/private/order/active/list
 | 起始时间 | start_tm_ms | 毫秒时间戳，可选，默认最小时间戳 |
 | 截止时间 | end_tm_ms | 毫秒时间戳，可选，默认当前时间戳 |
 | 请求数量 | limit | 可选，默认20，最大100，创建时间降序排列 |
+| 账号类型 | account_type | 可选，默认'trading'. 币币账号=trading，杠杆账号=margin |
 
 ```json
 {
@@ -339,6 +465,7 @@ POST /api/v1/private/order/history/list
 | 起始时间 | start_tm_ms | 毫秒时间戳，可选，默认最小时间戳 |
 | 截止时间 | end_tm_ms | 毫秒时间戳，可选，默认当前时间戳 |
 | 请求数量 | limit | 可选，默认20，最大100，创建时间降序排列 |
+| 账号类型 | account_type | 可选，默认'trading'. 币币账号=trading，杠杆账号=margin |
 
 ```json
 {
@@ -410,6 +537,7 @@ POST /api/v1/private/trade/list
 | 起始时间 | start_tm_ms | 毫秒时间戳，可选，默认最小时间戳 |
 | 截止时间 | end_tm_ms | 毫秒时间戳，可选，默认当前时间戳 |
 | 请求数量 | limit | 可选，默认20，最大100，创建时间降序排列 |
+| 账号类型 | account_type | 可选，默认'trading'. 币币账号=trading，杠杆账号=margin |
 
 ```json
 {
