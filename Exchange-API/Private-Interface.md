@@ -89,7 +89,7 @@ POST /api/v1/private/margin/balance/list
 ### 接口说明
 
 1. 此接口用于获取钱包账号的每个币种的余额，杠杆账号参与于币币交易
-2. BetaEX中币种充值和提币的余额默认放在资金账号，如果需要进行币币交易，需要您先将资金账号的余额划转到杠杆**账号
+2. BetaEX中币种充值和提币的余额默认放在资金账号，如果需要进行币币交易，需要您先将资金账号的余额划转到杠杆账号
 
 ### 参数
 
@@ -140,8 +140,8 @@ POST /api/v1/private/margin/balance/list
 		"equal_cny": 0,
 		"insurance_rate": 0,
 		"liquid_price": 0,
-        "is_liquid_locked": 0,
-        "loan_decimal": 2,
+		"is_liquid_locked": 0,
+		"loan_decimal": 2,
 		"currency_list": [{
 			"currency": "string",
 			"balance": 0,
@@ -187,8 +187,8 @@ POST /api/v1/private/margin/balance
 		"equal_cny": 0,
 		"insurance_rate": 0,
 		"liquid_price": 0,
-        "is_liquid_locked": 0,
-        "loan_decimal": 2,
+		"is_liquid_locked": 0,
+		"loan_decimal": 2,
 		"currency_list": [{
 			"currency": "string",
 			"balance": 0,
