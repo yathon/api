@@ -18,6 +18,9 @@ POST /api/v1/public/symbols
 | 最大总价限制 | limit_amount_max |  |
 | 最大总价限制 | limit_amount_max |  |
 | 是否支持杠杆交易 | is_support_margin | 0=不支持 1=支持 |
+| 是否为主板交易对 | is_main | false=不是 true=是 |
+| 是否为指数交易对 | is_index | false=不是 true=是 |
+| 是否为创新校对对 | is_innovate | false=不是 true=是 |
 
 
 ```json
@@ -33,7 +36,10 @@ POST /api/v1/public/symbols
         "limit_qty_max": 1000.0,
         "limit_amount_min": 1000.0,
         "limit_amount_max": 1000000.0,
-        "is_support_margin": 1
+        "is_support_margin": 1,
+        "is_main": true,
+        "is_index": false,
+        "is_innovate": false
     }]
 }
 ```
@@ -77,5 +83,40 @@ POST /api/v1/public/currencies
         "is_depositable": 1,
         "is_withdrawable": 1
     }]
+}
+```
+
+## 获取指数价格
+GET /api/v1/public/index/{symbol}
+
+### 参数说明
+
+| 名称        | 字段     |  说明 |
+| --------   | -----:   | :----: |
+| 交易对名称 | symbol | 指数交易对名称 |
+
+### 返回字段
+
+| 名称        | 字段     |  说明 |
+| --------   | -----:   | :----: |
+| 交易对名称 | symbol |  |
+| 指数价格 | index_price |  |
+| 指数价格对应的时间戳 | timestamp_ms | 毫秒，UTC时间 |
+| 生成指数价格的各数据源权重 | reference_weight | 当前此字段为null |
+
+### 举例
+GET https://market.betaex.com/api/v1/public/index/PT05_USDT
+
+返回值：
+```json
+{
+	"status": 0,
+	"msg": "ok",
+	"data": {
+		"symbol": "PT05_USDT",
+		"index_price": 0.7899,
+		"timestamp_ms": 1587903200000,
+		"reference_weight": null
+	}
 }
 ```
