@@ -105,7 +105,7 @@ GET /api/v1/public/index/{symbol}
 | 生成指数价格的各数据源权重 | reference_weight | 当前此字段为null |
 
 ### 举例
-GET https://market.betaex.com/api/v1/public/index/PT05_USDT
+GET https://api.betaex.com/api/v1/public/index/PT05_USDT
 
 返回值：
 ```json
