@@ -16,5 +16,5 @@
 [行情](./Market-Data-API/README.md) | [K-line.md](./Market-Data-API/K-line.md) | K 线
 [WebSocket](./WebSocket-API/README.md) | [Active-Order-Book.md](./WebSocket-API/Active-Order-Book.md) | 活跃订单簿
 [WebSocket](./WebSocket-API/README.md) | [Trade-History.md](./WebSocket-API/Trade-History.md) | 成交记录
-[WebSocket](./WebSocket-API/README.md) | [Handicap.md](./WebSocket-API/Handicap.md) | 盘口
+[WebSocket](./WebSocket-API/README.md) | [Ticker.md](./WebSocket-API/Ticker.md) | 盘口
 [WebSocket](./WebSocket-API/README.md) | [K-line.md](./WebSocket-API/K-line.md) | K 线
