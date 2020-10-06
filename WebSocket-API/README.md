@@ -16,7 +16,7 @@ wss://ws.betaex.com/sub
 
 ## 盘口
 
-见 [Handicap.md](./Handicap.md)
+见 [Ticker.md](./Ticker.md)
 
 ## k线
 
