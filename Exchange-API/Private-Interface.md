@@ -440,7 +440,7 @@ POST /api/v1/private/order/active/list
         "price": 11000.0,
         "state": "pending_submit",
         "amount": 14300.0,
-        "executed_amount": 0.0,
+        "filled_amount": 0.0,
         "filled_qty": 0.0,
         "maker_fee": 0.0,
         "taker_fee": 0.0,
