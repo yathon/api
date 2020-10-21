@@ -308,7 +308,7 @@ POST /api/v1/private/order/state
 | 数量 | qty  |  |
 | 订单状态 | state | |
 | 订单总额 | amount | |
-| 成交总额 | executed_amount | |
+| 成交总额 | filled_amount | |
 | 成交数量 | filled_qty | |
 | 挂单费用 | maker_fee | |
 | 吃单费用 | taker_fee | |
@@ -329,7 +329,7 @@ POST /api/v1/private/order/state
         "price": 11000.0,
         "state": "pending_submit",
         "amount": 14300.0,
-        "executed_amount": 0.0,
+        "filled_amount": 0.0,
         "filled_qty": 0.0,
         "maker_fee": 0.0,
         "taker_fee": 0.0,
@@ -418,7 +418,7 @@ POST /api/v1/private/order/active/list
 | 数量 | qty  |  |
 | 订单状态 | state | |
 | 订单总额 | amount | |
-| 成交总额 | executed_amount | |
+| 成交总额 | filled_amount | |
 | 成交数量 | filled_qty | |
 | 挂单费用 | maker_fee | |
 | 吃单费用 | taker_fee | |
@@ -492,7 +492,7 @@ POST /api/v1/private/order/history/list
 | 数量 | qty  |  |
 | 订单状态 | state | |
 | 订单总额 | amount | |
-| 成交总额 | executed_amount | |
+| 成交总额 | filled_amount | |
 | 成交数量 | filled_qty | |
 | 挂单费用 | maker_fee | |
 | 吃单费用 | taker_fee | |
@@ -514,7 +514,7 @@ POST /api/v1/private/order/history/list
         "price": 11000.0,
         "state": "pending_submit",
         "amount": 14300.0,
-        "executed_amount": 0.0,
+        "filled_amount": 0.0,
         "filled_qty": 0.0,
         "maker_fee": 0.0,
         "taker_fee": 0.0,
